@@ -203,7 +203,7 @@ def handler(ctx, data: io.BytesIO = None):
     ai_result = analyze_document_online(config=config, signer=signer, namespace=namespace, bucket_name=bucketName, object_name=resourceName, output_bucket= ai_vision_output_bucket, prefix="ai-vision-document")
 
     logging.getLogger().info("Moving object to processed bucket")
-    move_object(signer, namespace=namespace, source_bucket=bucketName, destination_bucket=processed_bucket, object_name=resourceName)
+    move_object(signer, namespace=namespace, source_bucket=bucketName, destination_bucket=ai_vision_output_bucket, object_name=resourceName)
     
     logging.getLogger().info("Persisting data")
     json_data = {
