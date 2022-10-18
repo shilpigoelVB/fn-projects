@@ -86,12 +86,7 @@ def analyze_document_online(config, signer, namespace, bucket_name, object_name,
         mime_type=resp.data.document_metadata.mime_type
         logging.getLogger().info("document_type:{0}".format(document_type))
         logging.getLogger().info("language_code:{0}".format(language_code))
-        document_job_id = resp.data.id
-        logging.getLogger().debug("Document Job Id: {0} ".format(document_job_id))
-        output_file_name=prefix+"/"+resp.data.id+"/"+namespace+"_"+bucket_name+"_"+object_name+".json"
-        logging.getLogger().debug("Output File Name: {0} ".format(output_file_name))
-        searchable_document_name=prefix+"/"+resp.data.id+"/"+namespace+"_"+bucket_name+"_"+object_name+"_searchable_document.pdf"
-        logging.getLogger().debug("Searchable Document Name: {0} ".format(searchable_document_name))
+        
         extracted_text = ""
         for page in resp.data.pages:
             for line in page.lines:
