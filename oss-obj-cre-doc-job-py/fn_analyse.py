@@ -105,9 +105,6 @@ def analyze_document_online(config, signer, namespace, bucket_name, object_name,
             "mime_type":mime_type, 
             "page_count":page_count, 
             "extracted_text":extracted_text,
-            "document_job_id":document_job_id,
-            "output_file_name":output_file_name,
-            "searchable_document_name":searchable_document_name,
             "raw_result_json":str(resp.data)
             }
         logging.getLogger().info("Returning values : {0} ".format(json.dumps(return_values)))
@@ -224,10 +221,7 @@ def handler(ctx, data: io.BytesIO = None):
         'document_type': "",
         'language_code': "",
         'page_count': 0,
-        'mime_type': "",
-        'processing_job_id': ai_result['document_job_id'],
-        'output_file_name': ai_result['output_file_name'],
-        'searchable_document_name': ai_result['searchable_document_name']
+        'mime_type': ""
         }
     headers =  {'Content-Type':"application/json"}
     persist_data(api_url, json_data, headers)
