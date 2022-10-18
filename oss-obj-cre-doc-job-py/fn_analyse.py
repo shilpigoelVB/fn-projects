@@ -57,7 +57,8 @@ def analyze_document_online(config, signer, namespace, bucket_name, object_name,
             features=[
                 oci.ai_vision.models.DocumentFeature(feature_type=oci.ai_vision.models.DocumentFeature.FEATURE_TYPE_DOCUMENT_CLASSIFICATION),
                 oci.ai_vision.models.DocumentFeature(feature_type=oci.ai_vision.models.DocumentFeature.FEATURE_TYPE_LANGUAGE_CLASSIFICATION),
-                oci.ai_vision.models.DocumentFeature(feature_type=oci.ai_vision.models.DocumentFeature.FEATURE_TYPE_TEXT_DETECTION)
+                oci.ai_vision.models.DocumentFeature(feature_type=oci.ai_vision.models.DocumentFeature.FEATURE_TYPE_TEXT_DETECTION),
+                oci.ai_vision.models.DocumentFeature(feature_type=oci.ai_vision.models.DocumentFeature.FEATURE_TYPE_KEY_VALUE_DETECTION)
             ],
             output_location=oci.ai_vision.models.OutputLocation(bucket_name=output_bucket, namespace_name=namespace, prefix=prefix),
             document=oci.ai_vision.models.ObjectStorageDocumentDetails(
