@@ -1,0 +1,8 @@
+create table customer_records (
+    customer_Id varchar2(255), 
+    DOCUMENT_NUMBER varchar2(255),
+    FIRST_NAME varchar2(255),
+    LAST_NAME varchar2(255),
+    CONSTRAINT customer_records_pk PRIMARY KEY (customer_id)
+)
+/
