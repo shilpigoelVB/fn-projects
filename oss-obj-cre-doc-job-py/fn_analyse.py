@@ -50,7 +50,7 @@ def analyze_document_bulk(config, signer, namespace, bucket_name, object_name, o
     logging.getLogger().debug("Searchable Document Name: {0} ".format(searchable_document_name))
     return {"document_job_id":document_job_id, "output_file_name":output_file_name, "searchable_document_name":searchable_document_name}
 
-def analyze_document_online(config, signer, namespace, bucket_name, object_name):
+def analyze_document_online(config, signer, namespace, bucket_name, object_name, output_bucket, prefix):
     ai_vision_client = oci.ai_vision.AIServiceVisionClient(config=config, signer=signer)
     resp = ai_vision_client.analyze_document(
         analyze_document_details=oci.ai_vision.models.AnalyzeDocumentDetails(
@@ -59,6 +59,7 @@ def analyze_document_online(config, signer, namespace, bucket_name, object_name)
                 oci.ai_vision.models.DocumentFeature(feature_type=oci.ai_vision.models.DocumentFeature.FEATURE_TYPE_LANGUAGE_CLASSIFICATION),
                 oci.ai_vision.models.DocumentFeature(feature_type=oci.ai_vision.models.DocumentFeature.FEATURE_TYPE_TEXT_DETECTION)
             ],
+            output_location=oci.ai_vision.models.OutputLocation(bucket_name=output_bucket, namespace_name=namespace, prefix=prefix),
             document=oci.ai_vision.models.ObjectStorageDocumentDetails(
                 source="OBJECT_STORAGE", 
                 namespace_name=namespace,
@@ -193,7 +194,7 @@ def handler(ctx, data: io.BytesIO = None):
 
    
         logging.getLogger().info("Analyzing object")
-        ai_result = analyze_document_online(config=config, signer=signer, namespace=namespace, bucket_name=bucketName, object_name=resourceName)
+        ai_result = analyze_document_online(config=config, signer=signer, namespace=namespace, bucket_name=bucketName, object_name=resourceName, output_bucket= ai_vision_output_bucket, prefix="ai-vision-document")
 
         logging.getLogger().info("Moving object to processed bucket")
         move_object(signer, namespace=namespace, source_bucket=bucketName, destination_bucket=processed_bucket, object_name=resourceName)
