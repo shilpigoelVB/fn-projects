@@ -227,7 +227,7 @@ def handler(ctx, data: io.BytesIO = None):
         'document_number': ai_result['extracted_text'],
         'first_name': ai_result['extracted_first_name'],
         'last_name': ai_result['extracted_last_name'],
-        'document_type': "",
+        'document_type': ai_result['document_type'],
         'language_code': "",
         'page_count': 0,
         'mime_type': ""
