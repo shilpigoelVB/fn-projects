@@ -227,7 +227,7 @@ def handler(ctx, data: io.BytesIO = None):
         }
     headers =  {'Content-Type':"application/json"}
     persist_data(api_url, json_data, headers)
-
+    logging.getLogger().debug("json_data : {}".format(json_data))
     return response.Response(
         ctx, response_data=json.dumps(
             {"status_code":"SUCCESS", "message": "Successfuly processed image {0}".format(resourceName)}),
