@@ -96,6 +96,7 @@ def analyze_document_online(config, signer, namespace, bucket_name, object_name,
             key_name= document_field.field_label.name
             logging.getLogger().debug("Key name : {0} ".format(key_name))
             key_name_value= document_field.field_value.value
+            extracted_text= key_name_value
             logging.getLogger().debug("Key name value : {0} ".format(key_name_value))
             
         return_values={
@@ -216,7 +217,7 @@ def handler(ctx, data: io.BytesIO = None):
         'os_namespace': namespace,
         'bucket_name': bucketName,
         'bucket_id': bucketId,
-        'extracted_text': "",
+        'extracted_text': ai_result['extracted_text'],
         'document_type': "",
         'language_code': "",
         'page_count': 0,
