@@ -88,10 +88,7 @@ def analyze_document_online(config, signer, namespace, bucket_name, object_name,
         logging.getLogger().info("language_code:{0}".format(language_code))
         
         extracted_text = ""
-        for page in resp.data.pages:
-            for line in page.lines:
-                #print(" {0} ".format(line.text))
-                extracted_text = extracted_text + line.text + "\n"
+        
         logging.getLogger().debug("extracted_text:{0}".format(extracted_text))
         ## words can also be extracted to build a search index
         key_value= resp.data.documentFields
