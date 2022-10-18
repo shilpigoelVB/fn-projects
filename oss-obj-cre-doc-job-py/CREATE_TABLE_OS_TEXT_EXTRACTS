@@ -1,0 +1,23 @@
+create table os_text_extracts (
+    resource_Id_hash varchar2(255), 
+    event_id varchar2(255),
+    event_Time date,
+    compartment_Id varchar2(255),
+    compartment_Name varchar2(255),
+    resource_Name varchar2(255),
+    resource_Id varchar2(255),
+    os_namespace varchar2(255),
+    bucket_Name varchar2(255),
+    bucket_Id varchar2(255),
+    document_number varchar2(50),
+    first_name varchar2(50),
+    last_name varchar2(50),
+    document_type varchar2(255),
+    language_code varchar2(10),
+    page_count number,
+    mime_type varchar2(80),
+    processing_job_id varchar2(255),
+    output_file_name varchar2(255),
+    searchable_document_name varchar2(255),
+    CONSTRAINT os_text_extracts_pk PRIMARY KEY (resource_Id_hash)
+)
