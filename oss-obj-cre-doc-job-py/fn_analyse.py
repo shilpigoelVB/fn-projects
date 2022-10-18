@@ -219,7 +219,7 @@ def handler(ctx, data: io.BytesIO = None):
         'os_namespace': namespace,
         'bucket_name': bucketName,
         'bucket_id': bucketId,
-        'extracted_text': "",
+        'extracted_text':  ai_result['raw_result_json'],
         'document_type': "",
         'language_code': "",
         'page_count': 0,
