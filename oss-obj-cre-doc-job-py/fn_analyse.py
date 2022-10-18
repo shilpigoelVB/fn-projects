@@ -91,7 +91,7 @@ def analyze_document_online(config, signer, namespace, bucket_name, object_name,
         
         logging.getLogger().debug("extracted_text:{0}".format(extracted_text))
         ## words can also be extracted to build a search index
-        key_value= resp.data.document_fields[0].field_Label
+        key_value= resp.data
         logging.getLogger().debug("Key Value : {0} ".format(key_value))
         return_values={
             "document_type":document_type, 
