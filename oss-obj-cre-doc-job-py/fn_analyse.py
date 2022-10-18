@@ -98,9 +98,9 @@ def analyze_document_online(config, signer, namespace, bucket_name, object_name,
             logging.getLogger().debug("Key name : {0} ".format(key_name))
             key_name_value= document_field.field_value.value
             extracted_text= key_name_value
-            if key_name == "FirstName"
+            if key_name == "FirstName":
               extracted_first_name = extracted_text
-            if key_name == "LastName"
+            if key_name == "LastName":
               extracted_last_name = extracted_text
             logging.getLogger().debug("Key name value : {0} ".format(key_name_value))
             
