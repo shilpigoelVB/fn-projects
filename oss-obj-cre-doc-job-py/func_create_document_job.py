@@ -49,7 +49,38 @@ def analyze_document_bulk(config, signer, namespace, bucket_name, object_name, o
     #ai-vision-document/ocid1.aivisiondocumentjob.oc1.uk-london-1.amaaaaaa74akfsaakfhqpcjxv4bswye3n5evltyyvpt6j3ke4e3znavj5xjq/lrfymfp24jnl_documents-process-queue_ai-vision-document/ocid1.aivisiondocumentjob.oc1.uk-london-1.amaaaaaa74akfsaarxgw6ituahcsrk2kryubsfw4c2lgcafhhah5n3w7fpka/lrfymfp24jnl_documents-process-queue_Bill-Of-Sales-1958-Chevy.tiff_searchable_document.pdf_searchable_document.pdf
     searchable_document_name=prefix+"/"+resp.data.id+"/"+namespace+"_"+bucket_name+"_"+object_name+"_searchable_document.pdf"
     logging.getLogger().debug("Searchable Document Name: {0} ".format(searchable_document_name))
-    return {"document_job_id":document_job_id, "output_file_name":output_file_name, "searchable_document_name":searchable_document_name}
+    extracted_text = ""
+        extracted_first_name = ""
+        extracted_last_name = ""
+        logging.getLogger().debug("extracted_text:{0}".format(extracted_text))
+        ## words can also be extracted to build a search index
+        key_value= resp.data.pages[0].document_fields[0].field_type
+        for document_field in resp.data.pages[0].document_fields:
+            key_name= document_field.field_label.name             
+            logging.getLogger().debug("Key name : {0} ".format(key_name))
+            key_name_value= document_field.field_value.value
+            extracted_text= key_name_value
+            if key_name == "FirstName":
+              extracted_first_name = extracted_text
+            if key_name == "LastName":
+              extracted_last_name = extracted_text
+            logging.getLogger().debug("Key name value : {0} ".format(key_name_value))
+            
+        return_values={
+            "document_type":document_type, 
+            "language_code":language_code, 
+            "mime_type":mime_type, 
+            "page_count":page_count, 
+            "extracted_text":extracted_text,
+            "extracted_first_name":extracted_first_name,
+            "extracted_last_name":extracted_last_name,
+            "raw_result_json":str(resp.data),
+            "document_job_id":document_job_id, 
+            "output_file_name":output_file_name,
+            "searchable_document_name":searchable_document_name
+            }
+        logging.getLogger().info("Returning values : {0} ".format(json.dumps(return_values)))
+        return return_values
 
 def analyze_document_online(config, signer, namespace, bucket_name, object_name):
     ai_vision_client = oci.ai_vision.AIServiceVisionClient(config=config, signer=signer)
