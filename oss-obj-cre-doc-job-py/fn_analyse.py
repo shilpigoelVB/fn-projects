@@ -230,7 +230,10 @@ def handler(ctx, data: io.BytesIO = None):
         'document_type': ai_result['document_type'],
         'language_code': "",
         'page_count': 0,
-        'mime_type': ""
+        'mime_type': "",
+        'processing_job_id': "",
+        'output_file_name': "",
+        'searchable_document_name': ""
         }
     headers =  {'Content-Type':"application/json"}
     persist_data(api_url, json_data, headers)
