@@ -34,7 +34,7 @@ def analyze_document_bulk(config, signer, namespace, bucket_name, object_name, o
                 oci.ai_vision.models.DocumentClassificationFeature(max_results=5),
                 oci.ai_vision.models.DocumentLanguageClassificationFeature(max_results=5),
                 oci.ai_vision.models.DocumentTextDetectionFeature(generate_searchable_pdf=True),
-                oci.ai_vision.models.DocumentFeature(feature_type=oci.ai_vision.models.DocumentFeature.FEATURE_TYPE_KEY_VALUE_DETECTION)
+                oci.ai_vision.models.DocumentKeyValueDetectionFeature(max_results=5)
             ],
             output_location=oci.ai_vision.models.OutputLocation(bucket_name=output_bucket, namespace_name=namespace, prefix=prefix)
         )
