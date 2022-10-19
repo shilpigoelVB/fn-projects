@@ -33,7 +33,8 @@ def analyze_document_bulk(config, signer, namespace, bucket_name, object_name, o
             features=[
                 oci.ai_vision.models.DocumentClassificationFeature(max_results=5),
                 oci.ai_vision.models.DocumentLanguageClassificationFeature(max_results=5),
-                oci.ai_vision.models.DocumentTextDetectionFeature(generate_searchable_pdf=True)
+                oci.ai_vision.models.DocumentTextDetectionFeature(generate_searchable_pdf=True),
+                oci.ai_vision.models.DocumentFeature(feature_type=oci.ai_vision.models.DocumentFeature.FEATURE_TYPE_KEY_VALUE_DETECTION)
             ],
             output_location=oci.ai_vision.models.OutputLocation(bucket_name=output_bucket, namespace_name=namespace, prefix=prefix)
         )
@@ -191,14 +192,7 @@ def handler(ctx, data: io.BytesIO = None):
         logging.getLogger().error('Error parsing json payload: ' + str(ex))
         raise
 
-    if 1==2:
-        logging.getLogger().info("Analyzing object")
-        ai_result = analyze_document_online(config=config, signer=signer, namespace=namespace, bucket_name=bucketName, object_name=resourceName)
-
-        logging.getLogger().info("Moving object to processed bucket")
-        move_object(signer, namespace=namespace, source_bucket=bucketName, destination_bucket=processed_bucket, object_name=resourceName)
-
-    logging.getLogger().info("Create document analyzing job")
+   logging.getLogger().info("Create document analyzing job")
     ai_result = analyze_document_bulk(config, signer, namespace, bucket_name=bucketName, object_name=resourceName, output_bucket= ai_vision_output_bucket, prefix="ai-vision-document")
 
     logging.getLogger().info("Persisting data")
