@@ -72,12 +72,12 @@ def analyze_document_bulk(config, signer, namespace, bucket_name, object_name, o
          "mime_type":mime_type, 
          "page_count":page_count, 
          "extracted_text":extracted_text,
-        "extracted_first_name":extracted_first_name,
-        "extracted_last_name":extracted_last_name,
-        "raw_result_json":str(resp.data),
-        "document_job_id":document_job_id, 
-        "output_file_name":output_file_name,
-        "searchable_document_name":searchable_document_name
+         "extracted_first_name":extracted_first_name,
+         "extracted_last_name":extracted_last_name,
+         "raw_result_json":str(resp.data),
+         "document_job_id":document_job_id, 
+         "output_file_name":output_file_name,
+         "searchable_document_name":searchable_document_name
        }
     logging.getLogger().info("Returning values : {0} ".format(json.dumps(return_values)))
     return return_values
