@@ -223,7 +223,7 @@ def handler(ctx, data: io.BytesIO = None):
         logging.getLogger().error('Error parsing json payload: ' + str(ex))
         raise
 
-   logging.getLogger().info("Create document analyzing job")
+    logging.getLogger().info("Create document analyzing job")
     ai_result = analyze_document_bulk(config, signer, namespace, bucket_name=bucketName, object_name=resourceName, output_bucket= ai_vision_output_bucket, prefix="ai-vision-document")
 
     logging.getLogger().info("Persisting data")
