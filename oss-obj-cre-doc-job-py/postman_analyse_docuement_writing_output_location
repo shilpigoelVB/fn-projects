@@ -1,0 +1,31 @@
+{
+    "document": {
+        "source": "OBJECT_STORAGE",
+        "namespaceName": "axdvjzox0ixb",
+        "bucketName": "FileUpload",
+        "objectName": "passport.pdf"
+    },
+    "features": [
+        {
+            "featureType": "TEXT_DETECTION","generateSearchablePdf":true
+        },
+        {
+            "featureType": "DOCUMENT_CLASSIFICATION"
+        },
+        {
+            "featureType": "LANGUAGE_CLASSIFICATION"
+        },
+        {
+      "featureType": "KEY_VALUE_DETECTION"
+      }
+
+    ],
+    "compartmentId": "ocid1.compartment.oc1..aaaaaaaa5spfo22vel6tsm32yevipblkopkhmz25nz5htnhoe7tzybgweu6a",
+    "documentType": "PASSPORT",
+    "language": "ENG",
+    "outputLocation": {
+        "bucketName": "VisionAI",
+        "namespaceName": "axdvjzox0ixb",
+        "prefix": ""
+    }
+}
