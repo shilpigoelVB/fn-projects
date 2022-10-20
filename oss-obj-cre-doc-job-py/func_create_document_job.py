@@ -50,10 +50,10 @@ def analyze_document_bulk(config, signer, namespace, bucket_name, object_name, o
     searchable_document_name=prefix+"/"+resp.data.id+"/"+namespace+"_"+bucket_name+"_"+object_name+"_searchable_document.pdf"
     logging.getLogger().debug("Searchable Document Name: {0} ".format(searchable_document_name))
     client = oci.object_storage.ObjectStorageClient(config={}, signer=signer)
-    object = client.get_object(namespace, bucket_name, object_name)
+   
     try:
         print("Searching for bucket and object", flush=True)
-        object = client.get_object(namespace, bucket_name, output_file_name)
+        object = client.get_object(namespace, bucket_name, object_name+".json")
         print("found object", flush=True)
         if object.status == 200:
             print("Success: The object " + object_name + " was retrieved with the content: " + object.data.text, flush=True)
