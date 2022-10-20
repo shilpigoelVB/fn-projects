@@ -53,23 +53,24 @@ def analyze_document_bulk(config, signer, namespace, bucket_name, object_name, o
     object = client.get_object(namespace, bucket_name, object_name)
     try:
         print("Searching for bucket and object", flush=True)
-        object = client.get_object(namespace, bucket_name, object_name)
+        object = client.get_object(namespace, bucket_name, output_file_name)
         print("found object", flush=True)
         if object.status == 200:
             print("Success: The object " + object_name + " was retrieved with the content: " + object.data.text, flush=True)
             message = object.data.text
+            logging.getLogger().debug(" Message is {0} ".format(message))
         else:
             message = "Failed: The object " + object_name + " could not be retrieved."
     except Exception as e:
         message = "Failed: " + str(e.message)
-    logging.getLogger().debug(" Message is {0} ".format(message))
+    
     
     extracted_text = ""
     extracted_first_name = ""
     extracted_last_name = ""
     logging.getLogger().debug("extracted_text:{0}".format(extracted_text))
     ## words can also be extracted to build a search index
-    key_value= resp.data.pages[0].document_fields[0].field_type
+    key_value= object.data.pages[0].document_fields[0].field_type
     for document_field in resp.data.pages[0].document_fields:
       key_name= document_field.field_label.name             
       logging.getLogger().debug("Key name : {0} ".format(key_name))
