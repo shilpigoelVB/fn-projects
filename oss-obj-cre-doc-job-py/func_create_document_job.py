@@ -49,22 +49,14 @@ def analyze_document_bulk(config, signer, namespace, bucket_name, object_name, o
     #ai-vision-document/ocid1.aivisiondocumentjob.oc1.uk-london-1.amaaaaaa74akfsaakfhqpcjxv4bswye3n5evltyyvpt6j3ke4e3znavj5xjq/lrfymfp24jnl_documents-process-queue_ai-vision-document/ocid1.aivisiondocumentjob.oc1.uk-london-1.amaaaaaa74akfsaarxgw6ituahcsrk2kryubsfw4c2lgcafhhah5n3w7fpka/lrfymfp24jnl_documents-process-queue_Bill-Of-Sales-1958-Chevy.tiff_searchable_document.pdf_searchable_document.pdf
     searchable_document_name=prefix+"/"+resp.data.id+"/"+namespace+"_"+bucket_name+"_"+object_name+"_searchable_document.pdf"
     logging.getLogger().debug("Searchable Document Name: {0} ".format(searchable_document_name))
-    client = oci.object_storage.ObjectStorageClient(config={}, signer=signer)
-   
-    try:
-        print("Searching for bucket and object", flush=True)
-        object = client.get_object(namespace, output_bucket, output_file_name)
-        print("found object", flush=True)
-        if object.status == 200:
-            print("Success: The object " + object_name + " was retrieved with the content: " + object.data.text, flush=True)
-            message = object.data.text
-            logging.getLogger().debug(" Message is {0} ".format(message))
-        else:
-            message = "Failed: The object " + object_name + " could not be retrieved."
-    except Exception as e:
-        message = "Failed: " + str(e.message)
     
-    
+    client = oci.object_storage.ObjectStorageClient(config=config, signer=signer)
+    print("Searching for bucket and object", flush=True)
+    object = client.get_object(namespace_name=namespace, bucket_name=output_bucket, object_name=output_file_name)
+    ai_out=json.loads(object.data.content.decode('utf-8'))
+    print("outout in ai_out")
+    print("found object", flush=True)
+        
     extracted_text = ""
     extracted_first_name = ""
     extracted_last_name = ""
