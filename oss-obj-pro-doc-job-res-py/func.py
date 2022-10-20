@@ -79,7 +79,7 @@ def parse_output_file(config, signer, namespace, bucketName, resourceName, sourc
     language_code=ai_out["detectedLanguages"][0]["languageCode"]
     
     original_document = find_original_document(namespace, bucketName, resourceName, sourceBucket)
-
+    logging.getLogger().info("original_document {0} from Bucket {1}".format(original_document, bucketName))
     extracted_text = ""
     for page in ai_out['pages']:
         for line in page['lines']:
