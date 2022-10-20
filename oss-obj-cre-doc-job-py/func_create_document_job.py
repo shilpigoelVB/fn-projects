@@ -53,7 +53,7 @@ def analyze_document_bulk(config, signer, namespace, bucket_name, object_name, o
    
     try:
         print("Searching for bucket and object", flush=True)
-        object = client.get_object(namespace, bucket_name, object_name+".json")
+        object = client.get_object(namespace, output_bucket, output_file_name)
         print("found object", flush=True)
         if object.status == 200:
             print("Success: The object " + object_name + " was retrieved with the content: " + object.data.text, flush=True)
