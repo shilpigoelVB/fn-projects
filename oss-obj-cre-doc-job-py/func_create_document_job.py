@@ -43,7 +43,7 @@ def analyze_document_bulk(config, signer, namespace, bucket_name, object_name, o
     logging.getLogger().debug("Document Job Id: {0} ".format(document_job_id))
     #ai-vision-document/ocid1.aivisiondocumentjob.oc1.uk-london-1.amaaaaaa74akfsaak4f4qryfawxfcxzhsawhxnxtszy44vmyzi5jsixx2g7q/lrfymfp24jnl_documents-process-queue_ah_receipt.jpg.json"
     #ai-vision-document/ocid1.aivisiondocumentjob.oc1.uk-london-1.amaaaaaa74akfsaakfhqpcjxv4bswye3n5evltyyvpt6j3ke4e3znavj5xjq/lrfymfp24jnl_documents-process-queue_ai-vision-document/ocid1.aivisiondocumentjob.oc1.uk-london-1.amaaaaaa74akfsaarxgw6ituahcsrk2kryubsfw4c2lgcafhhah5n3w7fpka/lrfymfp24jnl_documents-process-queue_Bill-Of-Sales-1958-Chevy.tiff_searchable_document.pdf.json
-    output_file_name=prefix+"/"+resp.data.id+"/"+namespace+"_"+bucket_name+"_"+object_name+".json"
+    output_file_name="/"+prefix+"/"+resp.data.id+"/"+namespace+"_"+bucket_name+"_"+object_name+".json"
     logging.getLogger().debug("Output File Name: {0} ".format(output_file_name))
     #ai-vision-document/ocid1.aivisiondocumentjob.oc1.uk-london-1.amaaaaaa74akfsaak4f4qryfawxfcxzhsawhxnxtszy44vmyzi5jsixx2g7q/lrfymfp24jnl_documents-process-queue_ah_receipt.jpg_searchable_document.pdf"
     #ai-vision-document/ocid1.aivisiondocumentjob.oc1.uk-london-1.amaaaaaa74akfsaakfhqpcjxv4bswye3n5evltyyvpt6j3ke4e3znavj5xjq/lrfymfp24jnl_documents-process-queue_ai-vision-document/ocid1.aivisiondocumentjob.oc1.uk-london-1.amaaaaaa74akfsaarxgw6ituahcsrk2kryubsfw4c2lgcafhhah5n3w7fpka/lrfymfp24jnl_documents-process-queue_Bill-Of-Sales-1958-Chevy.tiff_searchable_document.pdf_searchable_document.pdf
