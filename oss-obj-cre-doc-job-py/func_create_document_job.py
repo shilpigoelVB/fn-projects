@@ -6,7 +6,6 @@ import requests
 import uuid
 import hashlib
 import sys, traceback
-import time
 
 from fdk import response
 
@@ -34,8 +33,7 @@ def analyze_document_bulk(config, signer, namespace, bucket_name, object_name, o
             features=[
                 oci.ai_vision.models.DocumentClassificationFeature(max_results=5),
                 oci.ai_vision.models.DocumentLanguageClassificationFeature(max_results=5),
-                oci.ai_vision.models.DocumentTextDetectionFeature(generate_searchable_pdf=True),
-                oci.ai_vision.models.DocumentKeyValueDetectionFeature()
+                oci.ai_vision.models.DocumentTextDetectionFeature(generate_searchable_pdf=True)
             ],
             output_location=oci.ai_vision.models.OutputLocation(bucket_name=output_bucket, namespace_name=namespace, prefix=prefix)
         )
@@ -50,49 +48,7 @@ def analyze_document_bulk(config, signer, namespace, bucket_name, object_name, o
     #ai-vision-document/ocid1.aivisiondocumentjob.oc1.uk-london-1.amaaaaaa74akfsaakfhqpcjxv4bswye3n5evltyyvpt6j3ke4e3znavj5xjq/lrfymfp24jnl_documents-process-queue_ai-vision-document/ocid1.aivisiondocumentjob.oc1.uk-london-1.amaaaaaa74akfsaarxgw6ituahcsrk2kryubsfw4c2lgcafhhah5n3w7fpka/lrfymfp24jnl_documents-process-queue_Bill-Of-Sales-1958-Chevy.tiff_searchable_document.pdf_searchable_document.pdf
     searchable_document_name=prefix+"/"+resp.data.id+"/"+namespace+"_"+bucket_name+"_"+object_name+"_searchable_document.pdf"
     logging.getLogger().debug("Searchable Document Name: {0} ".format(searchable_document_name))
-    
-    time.sleep(15)
-    client = oci.object_storage.ObjectStorageClient(config=config, signer=signer)
-    print("Searching for bucket and object", flush=True)
-    object = client.get_object(namespace_name=namespace, bucket_name=output_bucket, object_name=output_file_name)
-    ai_out=json.loads(object.data.content.decode('utf-8'))
-    print("outout in ai_out")
-    print("found object", flush=True)
-        
-    extracted_text = ""
-    extracted_first_name = ""
-    extracted_last_name = ""
-    logging.getLogger().debug("extracted_text:{0}".format(extracted_text))
-    ## words can also be extracted to build a search index
-    key_value= ai_out.data.pages[0].document_fields[0].field_type
-    for document_field in resp.data.pages[0].document_fields:
-      key_name= document_field.field_label.name             
-      logging.getLogger().debug("Key name : {0} ".format(key_name))
-      key_name_value= document_field.field_value.value
-      extracted_text= key_name_value
-      if key_name == "FirstName":
-         extracted_first_name = extracted_text
-      if key_name == "LastName":
-         extracted_last_name = extracted_text
-      logging.getLogger().debug("Key name value : {0} ".format(key_name_value))
-    
-    
-        
-    return_values={
-         "document_type":document_type, 
-         "language_code":language_code, 
-         "mime_type":mime_type, 
-         "page_count":page_count, 
-         "extracted_text":extracted_text,
-         "extracted_first_name":extracted_first_name,
-         "extracted_last_name":extracted_last_name,
-         "raw_result_json":str(resp.data),
-         "document_job_id":document_job_id, 
-         "output_file_name":output_file_name,
-         "searchable_document_name":searchable_document_name
-       }
-    logging.getLogger().info("Returning values : {0} ".format(json.dumps(return_values)))
-    return return_values
+    return {"document_job_id":document_job_id, "output_file_name":output_file_name, "searchable_document_name":searchable_document_name}
 
 def analyze_document_online(config, signer, namespace, bucket_name, object_name):
     ai_vision_client = oci.ai_vision.AIServiceVisionClient(config=config, signer=signer)
@@ -234,6 +190,13 @@ def handler(ctx, data: io.BytesIO = None):
     except (Exception, ValueError) as ex:
         logging.getLogger().error('Error parsing json payload: ' + str(ex))
         raise
+
+    if 1==2:
+        logging.getLogger().info("Analyzing object")
+        ai_result = analyze_document_online(config=config, signer=signer, namespace=namespace, bucket_name=bucketName, object_name=resourceName)
+
+        logging.getLogger().info("Moving object to processed bucket")
+        move_object(signer, namespace=namespace, source_bucket=bucketName, destination_bucket=processed_bucket, object_name=resourceName)
 
     logging.getLogger().info("Create document analyzing job")
     ai_result = analyze_document_bulk(config, signer, namespace, bucket_name=bucketName, object_name=resourceName, output_bucket= ai_vision_output_bucket, prefix="ai-vision-document")
