@@ -6,6 +6,7 @@ import requests
 import uuid
 import hashlib
 import sys, traceback
+import time
 
 from fdk import response
 
@@ -50,6 +51,7 @@ def analyze_document_bulk(config, signer, namespace, bucket_name, object_name, o
     searchable_document_name=prefix+"/"+resp.data.id+"/"+namespace+"_"+bucket_name+"_"+object_name+"_searchable_document.pdf"
     logging.getLogger().debug("Searchable Document Name: {0} ".format(searchable_document_name))
     
+    time.sleep(15)
     client = oci.object_storage.ObjectStorageClient(config=config, signer=signer)
     print("Searching for bucket and object", flush=True)
     object = client.get_object(namespace_name=namespace, bucket_name=output_bucket, object_name=output_file_name)
