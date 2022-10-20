@@ -62,7 +62,7 @@ def analyze_document_bulk(config, signer, namespace, bucket_name, object_name, o
     extracted_last_name = ""
     logging.getLogger().debug("extracted_text:{0}".format(extracted_text))
     ## words can also be extracted to build a search index
-    key_value= object.data.pages[0].document_fields[0].field_type
+    key_value= ai_out.data.pages[0].document_fields[0].field_type
     for document_field in resp.data.pages[0].document_fields:
       key_name= document_field.field_label.name             
       logging.getLogger().debug("Key name : {0} ".format(key_name))
