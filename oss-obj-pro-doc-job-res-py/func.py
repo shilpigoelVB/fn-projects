@@ -48,10 +48,7 @@ def find_original_document(namespace, bucketName, resourceName, sourceBucket):
         # remove .json in the end
         originalFileName = originalFileName[:-5]
         simplifiedResourceName = originalFileName + ".json"
-    if fileName.endswith(".pdf"):
-        # vision service bug replace extra suffix
-        originalFileName = originalFileName.replace("_searchable_document.pdf","")
-        simplifiedResourceName = originalFileName + ".pdf"
+    
         
     originalResourceId="/n/"+namespace+"/b/"+sourceBucket+"/o/"+originalFileName
     originalResourceIdHash=hashlib.md5(originalResourceId.encode('utf-8')).hexdigest()
@@ -174,7 +171,7 @@ def handler(ctx, data: io.BytesIO = None):
         logging.getLogger().error('error parsing json payload: ' + str(ex))
         raise
 
-    if str(resourceName).endswith(".json") or str(resourceName).endswith(".pdf"):
+    if str(resourceName).endswith(".json"):
         logging.getLogger().info("{0} will be processed ".format(resourceName))
         
         original_document = find_original_document(namespace, bucketName, resourceName, sourceBucket=source_bucket)
@@ -206,10 +203,7 @@ def handler(ctx, data: io.BytesIO = None):
             source_object_name = resourceName, 
             destination_object_name = original_document["simplifiedResourceName"])
         
-        if str(resourceName).endswith(".pdf"):
-            delete_object(signer, namespace, bucket_name=bucketName, object_name=original_document['parentFolder'])
-    else:
-        logging.getLogger().info("{0} is not processed by this function".format(resourceName))
+        
 
     return response.Response(
         ctx, response_data=json.dumps(
