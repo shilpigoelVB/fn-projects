@@ -49,6 +49,21 @@ def analyze_document_bulk(config, signer, namespace, bucket_name, object_name, o
     #ai-vision-document/ocid1.aivisiondocumentjob.oc1.uk-london-1.amaaaaaa74akfsaakfhqpcjxv4bswye3n5evltyyvpt6j3ke4e3znavj5xjq/lrfymfp24jnl_documents-process-queue_ai-vision-document/ocid1.aivisiondocumentjob.oc1.uk-london-1.amaaaaaa74akfsaarxgw6ituahcsrk2kryubsfw4c2lgcafhhah5n3w7fpka/lrfymfp24jnl_documents-process-queue_Bill-Of-Sales-1958-Chevy.tiff_searchable_document.pdf_searchable_document.pdf
     searchable_document_name=prefix+"/"+resp.data.id+"/"+namespace+"_"+bucket_name+"_"+object_name+"_searchable_document.pdf"
     logging.getLogger().debug("Searchable Document Name: {0} ".format(searchable_document_name))
+    client = oci.object_storage.ObjectStorageClient(config={}, signer=signer)
+    object = client.get_object(namespace, bucketName, objectName)
+    try:
+        print("Searching for bucket and object", flush=True)
+        object = client.get_object(namespace, bucketName, objectName)
+        print("found object", flush=True)
+        if object.status == 200:
+            print("Success: The object " + objectName + " was retrieved with the content: " + object.data.text, flush=True)
+            message = object.data.text
+        else:
+            message = "Failed: The object " + objectName + " could not be retrieved."
+    except Exception as e:
+        message = "Failed: " + str(e.message)
+    logging.getLogger().debug(" Message is {0} ".format(message))
+    
     extracted_text = ""
     extracted_first_name = ""
     extracted_last_name = ""
@@ -65,7 +80,9 @@ def analyze_document_bulk(config, signer, namespace, bucket_name, object_name, o
       if key_name == "LastName":
          extracted_last_name = extracted_text
       logging.getLogger().debug("Key name value : {0} ".format(key_name_value))
-            
+    
+    
+        
     return_values={
          "document_type":document_type, 
          "language_code":language_code, 
