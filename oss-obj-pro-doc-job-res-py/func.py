@@ -103,6 +103,8 @@ def parse_output_file(config, signer, namespace, bucketName, resourceName, sourc
 
     return {
         'extracted_text': extracted_text,
+        'extracted_first_name':extracted_first_name,
+        'extracted_last_name':extracted_last_name,
         'document_type': document_type,
         'language_code': language_code,
         'page_count': page_count,
@@ -210,6 +212,9 @@ def handler(ctx, data: io.BytesIO = None):
             db_row['language_code']=ai_data["language_code"]
             db_row['page_count']=ai_data["page_count"]
             db_row['mime_type']=ai_data["mime_type"]
+            db_row['document_number']=ai_data['extracted_text']
+            db_row['first_name']=ai_data['extracted_first_name']
+            db_row['last_name']=ai_data['extracted_last_name']
             db_row.pop('links', None)
         
             headers =  {'Content-Type':"application/json"}
