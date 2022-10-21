@@ -80,10 +80,21 @@ def parse_output_file(config, signer, namespace, bucketName, resourceName, sourc
     original_document = find_original_document(namespace, bucketName, resourceName, sourceBucket)
     logging.getLogger().info("original_document {0} from Bucket {1}".format(original_document, bucketName))
     extracted_text = ""
-    for page in ai_out['pages']:
-        for line in page['lines']:
-            #print(" {0} ".format(line['text']))
-            extracted_text = extracted_text + line['text'] + "\n"
+    extracted_first_name = ""
+    extracted_last_name = ""
+    logging.getLogger().debug("extracted_text:{0}".format(extracted_text))
+    ## words can also be extracted to build a search index
+    key_value= resp.data.pages[0].document_fields[0].field_type
+    for document_field in resp.data.pages[0].document_fields:
+      key_name= document_field.field_label.name             
+      logging.getLogger().debug("Key name : {0} ".format(key_name))
+      key_name_value= document_field.field_value.value
+      extracted_text= key_name_value
+      if key_name == "FirstName":
+         extracted_first_name = extracted_text
+      if key_name == "LastName":
+         extracted_last_name = extracted_text
+      logging.getLogger().debug("Key name value : {0} ".format(key_name_value))
 
     return {
         'extracted_text': extracted_text,
