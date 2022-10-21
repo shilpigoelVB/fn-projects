@@ -92,7 +92,7 @@ def parse_output_file(config, signer, namespace, bucketName, resourceName, sourc
       logging.getLogger().debug("document_field.fieldLabel.name : {0} ".format(document_field["fieldLabel"]["name"]))
       key_name= document_field["fieldLabel"]["name"]             
       
-      key_name_value= document_field.fieldValue.value
+      key_name_value= document_field["fieldValue"]["value"]
       extracted_text= key_name_value
       if key_name == "FirstName":
          extracted_first_name = extracted_text
