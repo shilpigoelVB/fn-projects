@@ -71,6 +71,7 @@ def parse_output_file(config, signer, namespace, bucketName, resourceName, sourc
     #    f.write(str(os_obj.data.content.decode('utf-8')))
 
     ai_out=json.loads(os_obj.data.content.decode('utf-8'))
+    logging.getLogger().debug("ai_out is {0}".format(ai_out))
     
     page_count=ai_out["documentMetadata"]["pageCount"]
     mime_type=ai_out["documentMetadata"]["mimeType"]
@@ -84,8 +85,8 @@ def parse_output_file(config, signer, namespace, bucketName, resourceName, sourc
     extracted_last_name = ""
     logging.getLogger().debug("extracted_text:{0}".format(extracted_text))
     ## words can also be extracted to build a search index
-    key_value= resp.data.pages[0].document_fields[0].field_type
-    for document_field in resp.data.pages[0].document_fields:
+    key_value= ai_out["data"]["pages"][0]["document_fields"][0]["field_type"]
+    for document_field in ai_out["data"]["pages"][0]["document_fields"]:
       key_name= document_field.field_label.name             
       logging.getLogger().debug("Key name : {0} ".format(key_name))
       key_name_value= document_field.field_value.value
