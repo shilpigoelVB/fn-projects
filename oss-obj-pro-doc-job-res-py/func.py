@@ -85,10 +85,12 @@ def parse_output_file(config, signer, namespace, bucketName, resourceName, sourc
     extracted_last_name = ""
     logging.getLogger().debug("extracted_text:{0}".format(extracted_text))
     ## words can also be extracted to build a search index
-    key_value= ai_out["pages"][0]["documentFields"][0]["fieldType"]
+    
     for document_field in ai_out["pages"][0]["documentFields"]:
+      logging.getLogger().debug("document_field : {0} ".format(document_field))
+      logging.getLogger().debug("document_field.fieldLabel.name : {0} ".format(document_field.fieldLabel.name))
       key_name= document_field.fieldLabel.name             
-      logging.getLogger().debug("Key name : {0} ".format(key_name))
+      
       key_name_value= document_field.fieldValue.value
       extracted_text= key_name_value
       if key_name == "FirstName":
