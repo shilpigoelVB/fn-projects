@@ -88,6 +88,7 @@ def parse_output_file(config, signer, namespace, bucketName, resourceName, sourc
     
     for document_field in ai_out["pages"][0]["documentFields"]:
       logging.getLogger().debug("document_field : {0} ".format(document_field))
+      logging.getLogger().debug("document_field.fieldLabel : {0} ".format(document_field.fieldLabel))
       logging.getLogger().debug("document_field.fieldLabel.name : {0} ".format(document_field.fieldLabel.name))
       key_name= document_field.fieldLabel.name             
       
