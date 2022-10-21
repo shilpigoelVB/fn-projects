@@ -51,7 +51,9 @@ def find_original_document(namespace, bucketName, resourceName, sourceBucket):
     
         
     originalResourceId="/n/"+namespace+"/b/"+sourceBucket+"/o/"+originalFileName
+    logging.getLogger().info(" originalResourceId {0} from Bucket {1}".format(originalResourceId, sourceBucket))
     originalResourceIdHash=hashlib.md5(originalResourceId.encode('utf-8')).hexdigest()
+    logging.getLogger().info(" originalResourceIdHash {0} from Bucket {1}".format(originalResourceIdHash, sourceBucket))
     return {
         'resourceName':resourceName,
         'simplifiedResourceName':simplifiedResourceName,
