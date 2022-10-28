@@ -21,24 +21,39 @@ def persist_data(api_url, json_data, headers):
     if status_code not in [200, 201]: ##200: Updated, 201: Created
         raise Exception("Cannot persist object {0} on bucket {1}, status code {2} and reason {3}".format(json_data["resource_name"], json_data["bucket_name"], status_code, res.reason))
 
-def analyze_document_bulk(config, signer, namespace, bucket_name, object_name, output_bucket, prefix):
-    ai_vision_client = oci.ai_vision.AIServiceVisionClient(config=config, signer=signer)
-    resp = ai_vision_client.create_document_job(
-        create_document_job_details=oci.ai_vision.models.CreateDocumentJobDetails(
-            input_location=oci.ai_vision.models.ObjectListInlineInputLocation(
-                object_locations=[
-                    oci.ai_vision.models.ObjectLocation(bucket_name=bucket_name, namespace_name=namespace, object_name=object_name)
-                ]
-            ),
-            features=[
-                oci.ai_vision.models.DocumentClassificationFeature(max_results=5),
-                oci.ai_vision.models.DocumentLanguageClassificationFeature(max_results=5),
-                oci.ai_vision.models.DocumentTextDetectionFeature(generate_searchable_pdf=True),
-                oci.ai_vision.models.DocumentKeyValueDetectionFeature() 
-            ],
-            output_location=oci.ai_vision.models.OutputLocation(bucket_name=output_bucket, namespace_name=namespace, prefix=prefix)
-        )
-    )
+def analyze_document_bulk(config, signer, namespace, bucket_name, object_name, output_bucket, prefix, model_id, comp_id):
+    ai_vision_client = oci.ai_document.AIServicedocumentClient(config=config)
+    key_value_detection_feature = oci.ai_document.models.DocumentKeyValueDetectionFeature(modelId=model_id)
+    features = [key_value_detection_feature]
+    object_location_1 = oci.ai_document.models.ObjectLocation()
+    object_location_1.namespace_name = namespace
+    object_location_1.bucket_name = bucket_name
+    object_location_1.object_name = object_name
+    object_locations = [object_location_1]
+    input_location = oci.ai_document.models.ObjectListInlineInputLocation()
+    input_location.object_locations = object_locations
+    
+    output_location = oci.ai_document.models.OutputLocation()
+    output_location.namespace_name = namespace
+    output_location.bucket_name = output_bucket
+    output_location.prefix = prefix
+    
+    # Set up the processor config
+    general_processor_config = oci.ai_document.models.GeneralProcessorConfig()
+    general_processor_config.features = features
+    general_processor_config.processorType = oci.ai_document.models.ProcessorType.GENERAL()
+    general_processor_config.language = oci.ai_document.models.Language.ENG()
+    general_processor_config.is_zip_output_enabled = false
+    
+    # Details setup
+    create_processor_job_details = oci.ai_document.models.CreateProcessorJobDetails()
+    create_processor_job_details.compartment_id = comp_id
+    create_processor_job_details.output_location = output_location
+    create_processor_job_details.input_location = input_location
+    create_processor_job_details.processor_config = general_processor_config
+    resp = ai_service_document_client.create_processor_job(
+        create_processor_job_details=create_processor_job_details)
+    
     document_job_id = resp.data.id
     logging.getLogger().debug("Document Job Id: {0} ".format(document_job_id))
     #ai-vision-document/ocid1.aivisiondocumentjob.oc1.uk-london-1.amaaaaaa74akfsaak4f4qryfawxfcxzhsawhxnxtszy44vmyzi5jsixx2g7q/lrfymfp24jnl_documents-process-queue_ah_receipt.jpg.json"
@@ -148,6 +163,7 @@ def handler(ctx, data: io.BytesIO = None):
         ## api_url = "https://gf5f9ffc50769d0-sitl8rh4u9o8ht3x.adb.uk-london-1.oraclecloudapps.com/ords/admin/os_text_extracts/"
         api_url = config["ords-base-url"]
         ai_vision_output_bucket = config["ai-vision-output-bucket"]
+        model_id = config["model_id"]
         #schema = config["db-schema"]
         #dbuser = config["db-user"]
         #dbpwd = config["dbpwd-cipher"]
@@ -200,7 +216,7 @@ def handler(ctx, data: io.BytesIO = None):
         move_object(signer, namespace=namespace, source_bucket=bucketName, destination_bucket=processed_bucket, object_name=resourceName)
 
     logging.getLogger().info("Create document analyzing job")
-    ai_result = analyze_document_bulk(config, signer, namespace, bucket_name=bucketName, object_name=resourceName, output_bucket= ai_vision_output_bucket, prefix="ai-vision-document")
+    ai_result = analyze_document_bulk(config, signer, namespace, bucket_name=bucketName, object_name=resourceName, output_bucket= ai_vision_output_bucket, prefix="ai-vision-document", model_id, compartmentId)
 
     logging.getLogger().info("Persisting data")
     json_data = {
