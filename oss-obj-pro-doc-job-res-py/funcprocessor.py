@@ -163,7 +163,7 @@ def handler(ctx, data: io.BytesIO = None):
         ## api_url = "https://gf5f9ffc50769d0-sitl8rh4u9o8ht3x.adb.uk-london-1.oraclecloudapps.com/ords/admin/os_text_extracts/"
         api_url = config["ords-base-url"]
         ai_vision_output_bucket = config["ai-vision-output-bucket"]
-        model_id = config["model_id"]
+        modelid = config["model_id"]
         #schema = config["db-schema"]
         #dbuser = config["db-user"]
         #dbpwd = config["dbpwd-cipher"]
@@ -216,7 +216,7 @@ def handler(ctx, data: io.BytesIO = None):
         move_object(signer, namespace=namespace, source_bucket=bucketName, destination_bucket=processed_bucket, object_name=resourceName)
 
     logging.getLogger().info("Create document analyzing job")
-    ai_result = analyze_document_bulk(config, signer, namespace, bucket_name=bucketName, object_name=resourceName, output_bucket= ai_vision_output_bucket, prefix="ai-vision-document", model_id, compartmentId)
+    ai_result = analyze_document_bulk(config, signer, namespace, bucket_name=bucketName, object_name=resourceName, output_bucket= ai_vision_output_bucket, prefix="ai-vision-document", model_id = modelid, compartmentId)
 
     logging.getLogger().info("Persisting data")
     json_data = {
