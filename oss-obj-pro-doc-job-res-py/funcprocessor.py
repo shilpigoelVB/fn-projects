@@ -48,7 +48,7 @@ def analyze_document_bulk(config, signer, namespace, bucket_name, object_name, o
     create_processor_job_details.output_location = output_location
     create_processor_job_details.input_location = input_location
     create_processor_job_details.processor_config = general_processor_config
-    resp = ai_service_document_client.create_processor_job(
+    resp = ai_vision_client.create_processor_job(
         create_processor_job_details=create_processor_job_details)
     
     document_job_id = resp.data.id
