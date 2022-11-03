@@ -41,7 +41,6 @@ def analyze_document_bulk(config, signer, namespace, bucket_name, object_name, o
     # Set up the processor config
     general_processor_config = oci.ai_document.models.GeneralProcessorConfig()
     general_processor_config.features = features
-    general_processor_config.language = oci.ai_document.models.Language.ENG()
     general_processor_config.is_zip_output_enabled = false
     
     # Details setup
