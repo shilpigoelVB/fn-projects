@@ -181,7 +181,7 @@ def handler(ctx, data: io.BytesIO = None):
         if s_log_level == "DEBUG":
             log_level = 10
         logging.getLogger().setLevel(log_level)
-    except Exception as e:
+    except Exception as ex:
         logging.getLogger().error('Missing function config parameters: bucket_name, api_url, schema, dbuser, dbpwd: ' + str(ex))
         raise
     
