@@ -22,7 +22,7 @@ def persist_data(api_url, json_data, headers):
         raise Exception("Cannot persist object {0} on bucket {1}, status code {2} and reason {3}".format(json_data["resource_name"], json_data["bucket_name"], status_code, res.reason))
 
 def analyze_document_bulk(config, signer, namespace, bucket_name, object_name, output_bucket, prefix, model_id, comp_id):
-    ai_vision_client = oci.ai_document.AIServicedocumentClient(config=config)
+    ai_vision_client = oci.ai_document.AIServiceDocumentClient(config=config)
     key_value_detection_feature = oci.ai_document.models.DocumentKeyValueDetectionFeature(modelId=model_id)
     features = [key_value_detection_feature]
     object_location_1 = oci.ai_document.models.ObjectLocation()
