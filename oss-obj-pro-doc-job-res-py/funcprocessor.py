@@ -156,8 +156,10 @@ def handler(ctx, data: io.BytesIO = None):
     config = ctx.Config()
     eventID = eventTime = compartmentId = compartmentName = resourceName = resourceId = namespace = bucketName = bucketId = api_url = ""
     ai_vision_output_bucket = ""
+    source_bucket = ""
     ## Get Config
     try:
+        source_bucket = config ["source-bucket"]
         #input_bucket = config["input-bucket"]
         #processed_bucket = config["processed-bucket"]
         ## api_url = "https://gf5f9ffc50769d0-sitl8rh4u9o8ht3x.adb.uk-london-1.oraclecloudapps.com/ords/admin/os_text_extracts/"
