@@ -75,8 +75,6 @@ def parse_output_file(config, signer, namespace, bucketName, resourceName, sourc
     
     page_count=ai_out["documentMetadata"]["pageCount"]
     mime_type=ai_out["documentMetadata"]["mimeType"]
-    document_type=ai_out["detectedDocumentTypes"][0]["documentType"]
-    language_code=ai_out["detectedLanguages"][0]["languageCode"]
     
     original_document = find_original_document(namespace, bucketName, resourceName, sourceBucket)
     logging.getLogger().info("original_document {0} from Bucket {1}".format(original_document, bucketName))
@@ -105,8 +103,8 @@ def parse_output_file(config, signer, namespace, bucketName, resourceName, sourc
         'extracted_text': extracted_text,
         'extracted_first_name':extracted_first_name,
         'extracted_last_name':extracted_last_name,
-        'document_type': document_type,
-        'language_code': language_code,
+        'document_type': 'PAN CARD',
+        'language_code': 'ENGLISH',
         'page_count': page_count,
         'mime_type': mime_type,
         'original_file_name': original_document["originalFileName"],
