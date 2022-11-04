@@ -81,6 +81,7 @@ def parse_output_file(config, signer, namespace, bucketName, resourceName, sourc
     extracted_text = ""
     extracted_first_name = ""
     extracted_last_name = ""
+    extracted_pan_no = ""
     logging.getLogger().debug("extracted_text:{0}".format(extracted_text))
     ## words can also be extracted to build a search index
     
@@ -93,14 +94,16 @@ def parse_output_file(config, signer, namespace, bucketName, resourceName, sourc
       
       key_name_value= document_field["fieldValue"]["value"]
       extracted_text= key_name_value
-      if key_name == "FirstName":
+      if key_name == "name":
          extracted_first_name = extracted_text
-      if key_name == "LastName":
+      if key_name == "father_name":
          extracted_last_name = extracted_text
+      if key_name == "pan_no":
+         extracted_pan_no = extracted_text
       logging.getLogger().debug("Key name value : {0} ".format(key_name_value))
 
     return {
-        'extracted_text': extracted_text,
+        'extracted_text': extracted_pan_no,
         'extracted_first_name':extracted_first_name,
         'extracted_last_name':extracted_last_name,
         'document_type': 'PAN CARD',
