@@ -23,8 +23,9 @@ def persist_data(api_url, json_data, headers):
 
 def analyze_document_bulk(config, signer, namespace, bucket_name, object_name, output_bucket, prefix, model_id, comp_id):
     ai_vision_client = oci.ai_document.AIServiceDocumentClient(config=config, signer=signer)
+    document_classification_feature = oci.ai_document.models.DocumentClassificationFeature()
     key_value_detection_feature = oci.ai_document.models.DocumentKeyValueDetectionFeature(model_id=model_id)
-    features = [key_value_detection_feature]
+    features = [document_classification_feature, key_value_detection_feature]
     object_location_1 = oci.ai_document.models.ObjectLocation()
     object_location_1.namespace_name = namespace
     object_location_1.bucket_name = bucket_name
