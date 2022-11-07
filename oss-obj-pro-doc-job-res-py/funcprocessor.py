@@ -21,9 +21,9 @@ def persist_data(api_url, json_data, headers):
     if status_code not in [200, 201]: ##200: Updated, 201: Created
         raise Exception("Cannot persist object {0} on bucket {1}, status code {2} and reason {3}".format(json_data["resource_name"], json_data["bucket_name"], status_code, res.reason))
 
-def analyze_document_bulk(config, signer, namespace, bucket_name, object_name, output_bucket, prefix, model_id, comp_id):
+def analyze_document_bulk(config, signer, namespace, bucket_name, object_name, output_bucket, prefix, model_id, model_document_id, comp_id):
     ai_vision_client = oci.ai_document.AIServiceDocumentClient(config=config, signer=signer)
-    document_classification_feature = oci.ai_document.models.DocumentClassificationFeature()
+    document_classification_feature = oci.ai_document.models.DocumentClassificationFeature(model_id=model_document_id)
     key_value_detection_feature = oci.ai_document.models.DocumentKeyValueDetectionFeature(model_id=model_id)
     features = [document_classification_feature, key_value_detection_feature]
     object_location_1 = oci.ai_document.models.ObjectLocation()
@@ -164,6 +164,7 @@ def handler(ctx, data: io.BytesIO = None):
         api_url = config["ords-base-url"]
         ai_vision_output_bucket = config["ai-vision-output-bucket"]
         modelid = config["model_id"]
+        modeldocumentid = config["model_document_id"]
         #schema = config["db-schema"]
         #dbuser = config["db-user"]
         #dbpwd = config["dbpwd-cipher"]
@@ -216,7 +217,7 @@ def handler(ctx, data: io.BytesIO = None):
         move_object(signer, namespace=namespace, source_bucket=bucketName, destination_bucket=processed_bucket, object_name=resourceName)
 
     logging.getLogger().info("Create document analyzing job")
-    ai_result = analyze_document_bulk(config=config, signer=signer, namespace=namespace, bucket_name=bucketName, object_name=resourceName, output_bucket= ai_vision_output_bucket, prefix="ai-vision-document", model_id = modelid, comp_id = compartmentId)
+    ai_result = analyze_document_bulk(config=config, signer=signer, namespace=namespace, bucket_name=bucketName, object_name=resourceName, output_bucket= ai_vision_output_bucket, prefix="ai-vision-document", model_id = modelid, model_document_id=modeldocumentid, comp_id = compartmentId)
 
     logging.getLogger().info("Persisting data")
     json_data = {
